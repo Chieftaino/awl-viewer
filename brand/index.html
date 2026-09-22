@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шило для забивки — НЕ УСЛОЖНЯЙ</title>
+<meta name="description" content="Монолитное шило из нержавеющей стали для забивки чаши. Один пруток, без ручки и сборки. НЕ УСЛОЖНЯЙ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=11">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23050505' width='32' height='32'/%3E%3Cpath d='M6 22 L20 8 L24 12 L10 26 Z' fill='%23f4f3ef'/%3E%3C/svg%3E">
+</head>
+<body>
+<div id="load"><img src="logo.svg" alt="НЕ УСЛОЖНЯЙ"></div>
+<canvas id="c"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<nav>
+  <a class="logo" href="#top"><img src="logo.svg" alt="НЕ УСЛОЖНЯЙ"></a>
+  <div class="right">
+    <a href="#pack">Забивка</a>
+    <a href="#details">Детали</a>
+    <a href="#frames">Кадры</a>
+    <button class="pill" id="spin" type="button">360°</button>
+    <a class="pill solid" href="#order">Заказать</a>
+  </div>
+</nav>
+
+<div id="scroll">
+  <section class="hero" id="top">
+    <div class="hero-text">
+      <p class="k">Инструмент для забивки чаши</p>
+      <h1>Шило.<br>Один пруток стали.</h1>
+      <p class="lede">135 мм нержавеющей стали. Квадрат 6×6 в руке, остриё под 11° в табаке. Без ручки, без сборки, без лишнего.</p>
+    </div>
+    <div class="hero-foot">
+      <span class="mono">01 / остриё · листайте</span>
+      <span class="mono">Ø 0 → □ 6 · 30 г</span>
+    </div>
+  </section>
+
+  <section class="pack" id="pack">
+    <div class="sticky">
+      <video id="packvid" muted loop playsinline preload="auto" poster="video/pack_poster.jpg">
+        <source src="video/pack.webm" type="video/webm">
+        <source src="video/pack.mp4" type="video/mp4">
+      </video>
+      <div class="pack-text">
+        <p class="k">Забивка</p>
+        <h2>Прямая работа<br>с табаком.</h2>
+        <p>Остриё входит в лист и раздвигает его, не рубя в кашу. Квадратный пруток держит усилие и не проворачивается в пальцах. Чаша остаётся ровной, тяга — собранной.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="fly" id="details">
+    <div class="sticky">
+      <div class="cap l" data-cap="0">
+        <p class="k">02 / остриё</p>
+        <h2>Конус 11°.</h2>
+        <p>Сведён из тела прутка на 30 мм. Входит в лист, раздвигает и выходит — без заусенца, без рывка.</p>
+      </div>
+      <div class="cap r" data-cap="1">
+        <p class="k">03 / хват</p>
+        <h2>Насечка 0,5 мм.</h2>
+        <p>85 канавок на каждой грани второй половины прутка — там, где пальцы сжимают инструмент при забивке.</p>
+      </div>
+      <div class="cap l" data-cap="2">
+        <p class="k">04 / монолит</p>
+        <h2>Проушина и гравировка.</h2>
+        <p>Ø 3,2 под шнур или кольцо, чтобы шило висело у кальяна. Фаска 0,9 на рёбрах: держит хват, не режет. «Не усложняй» — на грани.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sheet">
+    <section class="frames" id="frames">
+      <figure class="wide"><img src="img/01_hero.jpg" alt="Шило целиком"><figcaption><span>01</span>Монолит, 135 мм, сатин вдоль оси</figcaption></figure>
+      <figure><img src="img/04_grip_macro.jpg" alt="Проушина и гравировка"><figcaption><span>02</span>Проушина Ø 3,2 · гравировка</figcaption></figure>
+      <figure><img src="img/03_tip_macro.jpg" alt="Остриё"><figcaption><span>03</span>Остриё, конус 11°</figcaption></figure>
+      <figure><img src="img/02_top.jpg" alt="Вид сверху"><figcaption><span>04</span>Грань с логотипом</figcaption></figure>
+      <figure><img src="img/05_rear_low.jpg" alt="Торец и насечка"><figcaption><span>05</span>Квадрат 6×6 · насечка</figcaption></figure>
+    </section>
+
+    <section class="specs">
+      <div class="specs-head">
+        <h2>Спецификация</h2>
+        <p>Одна деталь. Одна операция для руки — взять и давить.</p>
+      </div>
+      <dl>
+        <div><dt>Длина</dt><dd>135 мм</dd></div>
+        <div><dt>Сечение</dt><dd>□ 6 мм</dd></div>
+        <div><dt>Материал</dt><dd>нержавеющая сталь</dd></div>
+        <div><dt>Вес</dt><dd>30 г</dd></div>
+        <div><dt>Остриё</dt><dd>конус 11°, 30 мм</dd></div>
+        <div><dt>Фаска рёбер</dt><dd>0,9 мм</dd></div>
+        <div><dt>Насечка</dt><dd>шаг 0,5 мм, 42 мм на грань</dd></div>
+        <div><dt>Проушина</dt><dd>Ø 3,2 мм</dd></div>
+        <div><dt>Финиш</dt><dd>сатин вдоль оси</dd></div>
+        <div><dt>Гравировка</dt><dd>«Не усложняй», 0,2 мм</dd></div>
+      </dl>
+    </section>
+
+    <section class="order" id="order">
+      <img class="logo-xl" src="logo.svg" alt="НЕ УСЛОЖНЯЙ">
+      <div class="order-row">
+        <div>
+          <h2>Первая партия.</h2>
+          <p>Напишите — скажем цену, срок и когда можно забрать. Ответим лично.</p>
+        </div>
+        <a class="cta" id="buy" href="https://t.me/">Написать в Telegram</a>
+      </div>
+    </section>
+    <footer><span>Не усложняй</span><span class="mono">ШИЛО · НУ-ШК-001 · 2026</span></footer>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="app.js?v=11"></script>
+</body>
+</html>
