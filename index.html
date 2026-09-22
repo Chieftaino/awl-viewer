@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Шило для кальяна — НЕ УСЛОЖНЯЙ</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0b0d; color: #cfd0d4; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+               overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  #c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  #ui { position: fixed; left: 20px; bottom: 18px; pointer-events: none; }
+  #ui h1 { margin: 0 0 4px; font-size: 15px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #e8e8ea; }
+  #ui p  { margin: 0; font-size: 12px; color: #8a8b90; line-height: 1.5; }
+  #hint { position: fixed; right: 20px; bottom: 18px; font-size: 12px; color: #6e6f74; text-align: right; pointer-events: none; }
+  #load { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; letter-spacing: .1em; color: #6e6f74; }
+  #views { position: fixed; top: 16px; right: 16px; display: flex; gap: 6px; }
+  #views button { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: #cfd0d4; font-size: 12px;
+                  padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+  #views button:hover { background: rgba(255,255,255,.14); }
+  @media (max-width: 900px) { #hint { display: none; } #ui { right: 20px; } #ui p { font-size: 11px; } }
+</style>
+</head>
+<body oncontextmenu="return false">
+<canvas id="c"></canvas>
+<div id="load">ЗАГРУЗКА…</div>
+<div id="views">
+  <button data-v="hero">Общий</button>
+  <button data-v="logo">Логотип</button>
+  <button data-v="grip">Насечка</button>
+  <button data-v="tip">Остриё</button>
+</div>
+<div id="ui">
+  <h1>Шило для кальяна · монолит</h1>
+  <p>Нержавеющая сталь, пруток 6×6 мм, длина 135 мм · фаска 0.9 · проушина Ø3.2 · насечка 0.5 мм · гравировка «НЕ УСЛОЖНЯЙ»</p>
+</div>
+<div id="hint">вращать — ЛКМ / палец · приблизить — колесо / щипок · сдвинуть — ПКМ / два пальца</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const KEY = Uint8Array.from('9b3fe17c42a8d05e6f1183c7ad2be964f0c95a3d7e8b21c6'.match(/../g).map(h => parseInt(h, 16)));
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.85;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0b0d);
+// studio environment: dark room with a few softbox strips (what the steel reflects)
+function studioEnv() {
+  const env = new THREE.Scene();
+  env.background = new THREE.Color(0x000000);
+  const room = new THREE.Mesh(new THREE.BoxGeometry(60, 60, 60), new THREE.MeshBasicMaterial({ color: 0x0a0a0c, side: THREE.BackSide }));
+  env.add(room);
+  const strip = (w, h, pos, look, c, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k) }));
+    m.position.set(...pos); m.lookAt(...look); env.add(m);
+  };
+  strip(40, 3, [0, 18, 0], [0, 0, 0], 0xffffff, 9);        // long strip overhead -> highlight line on the brushed flats
+  strip(10, 14, [-20, 8, 12], [0, 0, 0], 0xfff2e2, 5);     // warm key front-left
+  strip(8, 12, [22, 6, -14], [0, 0, 0], 0xdde8ff, 4);      // cool rim back-right
+  strip(30, 6, [0, -2, -26], [0, 0, 0], 0x8a8f9a, 1.2);    // faint fill behind
+  return env;
+}
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(studioEnv(), 0.02).texture;
+
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 2000);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.minDistance = 8; controls.maxDistance = 400;
+controls.autoRotate = true; controls.autoRotateSpeed = 0.8;
+controls.addEventListener('start', () => controls.autoRotate = false);
+
+// studio lights (mm scale)
+const key = new THREE.DirectionalLight(0xfff6ea, 1.0); key.position.set(-160, 90, -120); scene.add(key);
+const rim = new THREE.DirectionalLight(0xd9e6ff, 0.8); rim.position.set(180, 60, 160); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0x3a3c44, 0x050506, 0.4));
+
+// slate floor
+const floor = new THREE.Mesh(new THREE.CircleGeometry(600, 64),
+  new THREE.MeshStandardMaterial({ color: 0x08080a, roughness: 0.9, metalness: 0.0, envMapIntensity: 0.25 }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = -3.0; scene.add(floor);
+
+const steel = new THREE.MeshPhysicalMaterial({
+  color: 0xd6d8dc, metalness: 1.0, roughness: 0.3,
+  envMapIntensity: 1.1,          // anisotropy off: the exported mesh has no tangents, it blows out to white
+});
+
+const VIEWS = {   // camera position / target in model mm (model axis = X, grip end at -67.5)
+  hero: { pos: [ 48, 52, 118], tgt: [ 5, 0, 0] },
+  logo: { pos: [-40, 34, 36],  tgt: [-36, 3, 0] },
+  grip: { pos: [ -5, 30, 40],  tgt: [ -2, 3, 0] },
+  tip:  { pos: [ 55, 28, 48],  tgt: [ 52, 0, 0] },
+};
+let animTo = null;
+function goTo(name, instant) {
+  const v = VIEWS[name];
+  controls.autoRotate = false;
+  if (instant) { camera.position.set(...v.pos); controls.target.set(...v.tgt); controls.update(); return; }
+  animTo = { p: new THREE.Vector3(...v.pos), t: new THREE.Vector3(...v.tgt), k: 0 };
+}
+document.querySelectorAll('#views button').forEach(b => b.addEventListener('click', () => goTo(b.dataset.v)));
+
+async function load() {
+  const res = await fetch('model.bin', { cache: 'force-cache' });
+  const buf = new Uint8Array(await res.arrayBuffer());
+  for (let i = 0; i < buf.length; i++) buf[i] ^= KEY[i % KEY.length] ^ (i & 0xff);
+  const gltf = await new Promise((ok, err) => new GLTFLoader().parse(buf.buffer, '', ok, err));
+  const root = gltf.scene;
+  root.traverse(o => { if (o.isMesh) o.material = steel; });
+  // glTF exporter maps Blender Z-up -> Y-up; centre the part on the origin
+  let box = new THREE.Box3().setFromObject(root);
+  const size = box.getSize(new THREE.Vector3());
+  root.scale.setScalar(135 / Math.max(size.x, size.y, size.z));      // normalise to mm regardless of export units
+  box = new THREE.Box3().setFromObject(root);
+  const c = box.getCenter(new THREE.Vector3());
+  root.position.sub(c);
+  window.__dbg = { root, camera, controls, size, box };
+  scene.add(root);
+  document.getElementById('load').remove();
+  goTo('hero', true);
+  controls.autoRotate = true;
+}
+load().catch(e => { document.getElementById('load').textContent = 'Не удалось загрузить модель'; console.error(e); });
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+renderer.setAnimationLoop(() => {
+  if (animTo) {
+    animTo.k = Math.min(1, animTo.k + 0.05);
+    const e = 1 - Math.pow(1 - animTo.k, 3);
+    camera.position.lerp(animTo.p, e * 0.35);
+    controls.target.lerp(animTo.t, e * 0.35);
+    if (animTo.k >= 1) animTo = null;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+// discourage saving: no drag-out, no keyboard save shortcuts
+addEventListener('dragstart', e => e.preventDefault());
+addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && ['s', 'u', 'p'].includes(e.key.toLowerCase())) e.preventDefault(); });
+</script>
+</body>
+</html>
